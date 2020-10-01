@@ -29,6 +29,6 @@ Route::get('/news', function(){
     return view('news.all');
 });
 
-Route::get('/news/{news_code}', function(){
+Route::get('/news/detail', function(){
     return view('news.detail');
 });
