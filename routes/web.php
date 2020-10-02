@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\HomeController;
+use App\Http\Controllers\News\IndexController as News;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,17 +18,13 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-Route::get('/', function(){
-    return view('main');
-});
+Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/about', function(){
     return view('about');
 });
 
-Route::get('/news', function(){
-    return view('news.all');
-});
+Route::get('/news', [News::class, 'index']);
 
 Route::get('/news/detail', function(){
     return view('news.detail');
