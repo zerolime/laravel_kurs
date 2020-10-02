@@ -8,11 +8,11 @@ use App\Models\News;
 
 class NewsController extends Controller
 {
-    public function showAll()
+    public function showAll(News $newsModel,Categories $categoriesModel)
     {
 
-        $categories = (new Categories)->getData();
-        $news = (new News)->getData();
+        $categories = $categoriesModel->getData();
+        $news = $newsModel->getData();
 
         foreach ($categories as $k => $cat){
             $categories[$k]['link'] = route('slug', ['slug' => $cat['slug']]);
@@ -37,11 +37,21 @@ class NewsController extends Controller
         );
     }
 
-    public function showDetail($id){
-        $article = (new News)->getById($id);
+    public function showDetail($id, News $news){
+        try{
+            $article = $news->getById($id);
+        } catch(\Exception $e){
+            return response(view('news.detail404'), 404);
+        }
+        $similarNews = $news->getBySlugId($article['slugs'],4 , true);
 
-        if($article) return view('news.detail', $article);
+        return view('news.detail',
+            [
+                'article' => $article,
+                'similarNews' => $similarNews,
+                'aside' => true
+            ]
+        );
 
-        //return view('404');
     }
 }

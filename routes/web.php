@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController as Home;
 use App\Http\Controllers\News;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,25 +21,30 @@ use App\Http\Controllers\News;
 
 Route::get('/', [Home::class, 'index'])->name('home');
 
-Route::get('/about', function(){
+Route::get('/about', function () {
     return view('about');
 });
 
-Route::prefix('news')->group(function (){
+Route::prefix('news')->group(function () {
 
     Route::get('/', [News\NewsController::class, 'showAll'])
-    ->name('all');
+        ->name('all');
 
     Route::get('/view/{id}', [News\NewsController::class, 'showDetail'])
         ->where('id', '[0-9]+')
         ->name('detail');
 
-    Route::get('/slugs/',[News\CategoryController::class, 'showAll'])
+    Route::get('/slugs/', [News\CategoryController::class, 'showAll'])
         ->name('slugs');
 
-    Route::get('/slug/{slug}',[News\CategoryController::class, 'showBySlug'])
+    Route::get('/slug/{slug}', [News\CategoryController::class, 'showBySlug'])
         ->name('slug');
 
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [News\NewsController::class, 'showAll'])
+        ->name('all');
 });
 
 

@@ -90,20 +90,26 @@ class News extends Model
     }
 
     public function getById(int $id){
-        return static::$data[$id];
+        if (static::$data[$id]) return static::$data[$id];
+
+        throw new \Exception();
     }
 
-    public function getBySlug($slug, int $limit = 0){
+    public function getBySlug($slug, int $limit = 0, bool $last = false, Categories $categoriesModel){
+
+        $temp = static::$data;
+
+        if($last) $temp = array_reverse($temp, true);
 
         $data = [];
 
         try {
-            $slugId = (new Categories)->getIdBySlug($slug);
+            $slugId = $categoriesModel->getIdBySlug($slug);
         } catch (\Exception $e){
             return [];
         }
 
-        foreach (static::$data as $k => $newsItem){
+        foreach ($temp as $k => $newsItem){
             if (in_array($slugId, $newsItem['slugs'])){
 
                 $data[$k] = $newsItem;
@@ -114,16 +120,22 @@ class News extends Model
 
         return $data;
     }
-    public static function getBySlugId($slugId, int $limit = 0)
+    public static function getBySlugId($slugId, int $limit = 0, bool $last = false)
     {
         //$slug = (new Categories)->getById($slugId);
 
-        //if(!$slug) return [];
+        //if(!$slugId) return [];
+        $temp = static::$data;
+
+        if($last) $temp = array_reverse($temp, true);
+
+        if(!is_array($slugId)) $slugId = [$slugId];
 
         $data = [];
 
-        foreach (static::$data as $k => $newsItem){
-            if (in_array($slugId, $newsItem['slugs'])){
+        foreach ($temp as $k => $newsItem){
+//            dump($slugId,$newsItem['slugs'],array_intersect($slugId, $newsItem['slugs']));
+            if (array_intersect($slugId, $newsItem['slugs'])){
 
                 $data[$k] = $newsItem;
 

@@ -21,7 +21,7 @@
     <body>
         <header>@yield('header', View::make('pageBlocks.header'))</header>
         <main>
-            @if ($aside ?? '')
+            @if ($aside ?? null)
                 <aside> @yield('aside')</aside>
             @endif
             <div class="content">
