@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\HomeController;
-use App\Http\Controllers\News\IndexController as News;
+use App\Http\Controllers\HomeController as Home;
+use App\Http\Controllers\News;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,14 +18,30 @@ use App\Http\Controllers\News\IndexController as News;
 //    return view('welcome');
 //});
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [Home::class, 'index'])->name('home');
 
 Route::get('/about', function(){
     return view('about');
 });
 
-Route::get('/news', [News::class, 'index']);
+Route::prefix('news')->group(function (){
 
-Route::get('/news/detail', function(){
-    return view('news.detail');
+    Route::get('/', [News\NewsController::class, 'showAll'])
+    ->name('all');
+
+    Route::get('/view/{id}', [News\NewsController::class, 'showDetail'])
+        ->where('id', '[0-9]+')
+        ->name('detail');
+
+    Route::get('/slugs/',[News\CategoryController::class, 'showAll'])
+        ->name('slugs');
+
+    Route::get('/slug/{slug}',[News\CategoryController::class, 'showBySlug'])
+        ->name('slug');
+
 });
+
+
+Auth::routes();
+
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

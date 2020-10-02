@@ -84,6 +84,7 @@ class News extends Model
             ],
         ];
 
+
     public function getData(){
         return static::$data;
     }
@@ -101,6 +102,25 @@ class News extends Model
         } catch (\Exception $e){
             return [];
         }
+
+        foreach (static::$data as $k => $newsItem){
+            if (in_array($slugId, $newsItem['slugs'])){
+
+                $data[$k] = $newsItem;
+
+                if($limit && count($data) == $limit) break;
+            }
+        }
+
+        return $data;
+    }
+    public static function getBySlugId($slugId, int $limit = 0)
+    {
+        //$slug = (new Categories)->getById($slugId);
+
+        //if(!$slug) return [];
+
+        $data = [];
 
         foreach (static::$data as $k => $newsItem){
             if (in_array($slugId, $newsItem['slugs'])){

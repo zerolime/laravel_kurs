@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\News;
 
-class IndexController extends Controller
+class NewsController extends Controller
 {
-    public function index()
+    public function showAll()
     {
 
         $categories = (new Categories)->getData();
         $news = (new News)->getData();
 
         foreach ($categories as $k => $cat){
-            $categories[$k]['link'] = "/news/slug/{$cat['slug']}";
+            $categories[$k]['link'] = route('slug', ['slug' => $cat['slug']]);
         }
 
         foreach ($news as $k => $article){
@@ -35,5 +35,13 @@ class IndexController extends Controller
                 'news' => $news,
             ]
         );
+    }
+
+    public function showDetail($id){
+        $article = (new News)->getById($id);
+
+        if($article) return view('news.detail', $article);
+
+        //return view('404');
     }
 }

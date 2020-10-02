@@ -1,6 +1,6 @@
 @extends('layouts.common')
 
-@section('pageTitle' , 'Новости')
+@section('pageTitle' , "Новости категории {}")
 
 @section('aside')
     @include('pageBlocks.aside.categories', ['categories' => $categories])
@@ -37,3 +37,4 @@
         <div>news not found</div>
     @endforelse
 @endsection
+

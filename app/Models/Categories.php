@@ -39,6 +39,13 @@ class Categories extends Model
     public function getById($id){
         return static::$data[$id];
     }
+    public function getBySlug($slug){
+        foreach (static::$data as $cat){
+            if($cat['slug'] === $slug) return $cat;
+        }
+
+        throw new \Exception("category {$slug} not exist");
+    }
 
     public function getIdBySlug($slug){
 
